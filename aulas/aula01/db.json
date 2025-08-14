@@ -1,0 +1,16 @@
+{
+  "contatos": [
+    {
+      "id": "23d4",
+      "nome": "Lucas",
+      "Email": "Lucasmachado8814@gmail.com",
+      "Telefone": "(61)9-9386-7613"
+    },
+    {
+      "id": "c9db",
+      "nome": "Gabriel",
+      "Email": "gabrielmachado8814@gmail.com",
+      "Telefone": "(61)9-9275-6502"
+    }
+  ]
+}
