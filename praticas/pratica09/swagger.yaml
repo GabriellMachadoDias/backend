@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: API de Produtos
+  description: Projeto de uma API REST usando ExpressJs e Swagger.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+    description: Ambiente de Desenvolvimento
+tags:
+  - produtos
+paths:
+  /produtos:
+    get:
+      summary: Lista todos os produtos
+      tags:
+        - produtos
+      responses:
+        200:
+          description: Uma lista de produtos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfProdutos'
+        500:
+          description: Erro inesperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+    post:
+      summary: Cadastra um novo produto
+      tags:
+        - produtos
+      requestBody:
+        description: Um JSON com dados do novo produto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Produto'
+      responses:
+        201:
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        422:
+          description: Nome e preço são obrigatórios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        500:
+          description: Erro inesperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+  /produtos/{produtoId}:
+    get:
+      summary: Obter um produto pelo ID
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          schema:
+            type: integer
+          required: true
+          description: Id do produto a ser buscado
+      responses:
+        200:
+          description: Um JSON com os dados do produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        404:
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        500:
+          description: Erro inesperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+    put:
+      summary: Atualizar um produto existente
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          schema:
+            type: integer
+          required: true
+          description: Id do produto a ser buscado
+      requestBody:
+        description: Um JSON com dados do produto a atualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Produto'
+      responses:
+        200:
+          description: Um JSON com os dados do produto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        404:
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        422:
+          description: Nome e preço são obrigatórios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        500:
+          description: Erro inesperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+    delete:
+      summary: Apagar um produto existente
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          schema:
+            type: integer
+          required: true
+          description: Id do produto a ser buscado
+      responses:
+        204:
+          description: Produto removido com sucesso
+        404:
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+        500:
+          description: Erro inesperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+components:
+  schemas:
+    Produto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Camisa
+        preco:
+          type: number
+          example: 79.9
+
+    ArrayOfProdutos:
+      type: array
+      items:
+        $ref: '#/components/schemas/Produto'
+
+    Erro:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Ocorreu um erro no servidor"
+
+  securitySchemes:
+    token_jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
+      name: Authorization
